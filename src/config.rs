@@ -140,7 +140,6 @@ fn detect_output_color() -> Printer {
         // Enable color support for Windows 10
         #[cfg(windows)]
         {
-            use ansi_term;
             match ansi_term::enable_ansi_support() {
                 Ok(_) => Printer::colored(),
                 Err(_) => Printer::no_colored(),

@@ -31,7 +31,7 @@ executable and other additional content such as completion files (*Bash*, *Zsh*,
 *fish* and *PowerShell*).
 
 ### Arch Linux
-A package is available in the AUR 
+A package is available in the AUR
 ([`rnr`](https://aur.archlinux.org/packages/rnr/)) to install latest version of
 *RnR* on Arch Linux.
 
@@ -174,7 +174,7 @@ find . -type f +mtime 1 | xargs rnr -f file renamed
 
 ##### Read list of files from a file
 ```sh
-cat file_list.txt | xargs rnr -f file rename 
+cat file_list.txt | xargs rnr -f file rename
 ```
 
 `file_list.txt` content:
@@ -274,7 +274,7 @@ rnr -f -r -d 2 file renamed ./
 #### Recursive rename including directories and hidden files
 `rnr` ignore hidden files by default to speed up the operations and avoid problems with some particular directories like `.git/` or `.local/`. You can include hidden files passing `-x` option. Also, you can use include directories `-D` option with `-r` too.
 ```sh
-rnr -f -r 
+rnr -f -r
 ```
 *Original tree*
 ```
@@ -348,7 +348,7 @@ rnr -f -b file renamed ./*
 More info about regex used [in the `regex` package](https://docs.rs/regex).
 #### Replace extensions
 ```
-rnr -f '\..*$' '.txt' ./* 
+rnr -f '\..*$' '.txt' ./*
 ```
 *Original tree*
 ```
@@ -423,4 +423,25 @@ rnr -f '(?P<number>\d{2})\.(?P<ext>\w{3})' '${ext}.${number}' ./*
 ├── file-txt.01
 ├── file-txt.02
 └── file-txt.03
+```
+
+#### Auto-generated running number
+The special string `$i` in the replacement will be replaced by a running number
+that starts with 1.
+```sh
+rnr -f '.*' 'my file $i.txt' ./*
+```
+*Original tree*
+```
+.
+├── file-01.txt
+├── file-02.txt
+└── file-03.txt
+```
+*Renamed tree*
+```
+.
+├── my file 01.txt
+├── my file 02.txt
+└── my file 03.txt
 ```

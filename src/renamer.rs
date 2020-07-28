@@ -63,9 +63,13 @@ impl Renamer {
     }
 
     /// Replace expression match in the given path using stored config.
-    fn replace_match(&self, path: &PathBuf) -> PathBuf {
+    fn replace_match(&self, path: &PathBuf, running_number: i32) -> PathBuf {
         let expression = &self.config.expression;
         let replacement = &self.config.replacement;
+
+        let running_number = format!("{:02}", &running_number);
+
+        let replacement = replacement.replace("$i", &running_number);
 
         let file_name = path.file_name().unwrap().to_str().unwrap();
         let parent = path.parent();
@@ -85,8 +89,14 @@ impl Renamer {
         let mut rename_map = RenameMap::new();
         let mut error_string = String::new();
 
+        let mut running_number = 1;
+
+        let mut paths: Vec<PathBuf> = paths.iter().map(|x| x.clone()).collect();
+        paths.sort();
+
         for path in paths {
-            let target = self.replace_match(&path);
+            let target = self.replace_match(&path, running_number);
+            running_number += 1;
             // Discard paths with no changes
             if target != *path {
                 if let Some(old_path) = rename_map.insert(target.clone(), path.clone()) {
